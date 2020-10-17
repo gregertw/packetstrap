@@ -18,7 +18,18 @@ First, deploy the following:
 
 This node will act as our “helper”. This is not to be confused with the bootstrap node for deploying OKD. We will deploy that later. The “helper” will be where we run the os-strap.sh and okd-strap.sh scripts to get everything ready to go.
 
-Once x1.small.x86 is up and running ssh to it and download the scripts (git isn’t installed by default).
+
+
+Once x1.small.x86 is up and running ssh to it and:
+Install git:
+```
+sudo yum install git
+```
+
+Then check out the repo:
+```
+git clone https://github.com/gregertw/packetstrap.git
+```
 
 ```
 # wget https://raw.githubusercontent.com/gregertw/packetstrap/master/os-strap.sh

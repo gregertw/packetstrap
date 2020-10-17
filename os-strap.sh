@@ -6,8 +6,6 @@
 # You also need to:
 #   - have a ssh key in ~/.ssh/id_rsa.pub 
 
-[[ $# -ne 2 ]] && echo "Please provide 2 arguments" && exit 254
-
 # Create SSH key
 ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
 
@@ -18,7 +16,9 @@ PUBLICIP=`ip address show dev bond0 |grep bond0 |grep -v bond0:0 |grep inet |awk
 echo "==== clean up yum and repo setup"
 yum clean all
 yum install yum-utils -y
-sudo yum install rhel-7-server-extras-rpms rhel-7-server-optional-rpms
+yum install firewalld -y
+
+service firewalld start
 
 echo "==== setup firewall"
 firewall-cmd --add-port=80/tcp
@@ -43,14 +43,17 @@ firewall-cmd --add-port=892/udp
 firewall-cmd --add-port=2049/udp
 firewall-cmd --add-port=32803/udp
 firewall-cmd --runtime-to-permanent
+firewall-cmd --reload
 
 echo "==== install and configure nfs"
 yum install nfs-utils -y
 echo "/mnt/data *(rw,sync,no_wdelay,no_root_squash,insecure)" >> /etc/exports
+
 #This is a terrible idea
+mkdir /mnt/data
 chmod -R 777 /mnt/data
 
-mkdir /mnt/data
+
 service nfs start
 exportfs
 
@@ -142,15 +145,13 @@ echo "apache is setup" > /var/www/html/test
 service httpd start
 
 echo "==== get okd install, client, and COS images"
-pushd
 mkdir binaries
-cd binaries
+pushd binaries
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-client-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-install-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
 
 mkdir pxe
-pushd
-cd pxe
+pushd pxe
 # Get fedora-coreos.initramfs.x86_64.img, fedora-coreos.x86_64.iso, fedora-coreos.kernel-x86_64, fedora-coreos.rootfs.x86_64.img, 
 # fedora-coreos.metal.x86_64.raw.xz
 wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/32.20200923.3.0/x86_64/fedora-coreos-32.20200923.3.0-live-initramfs.x86_64.img
