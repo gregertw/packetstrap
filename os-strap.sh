@@ -3,16 +3,6 @@
 # This simple bash scripts will bootstrap a CentOS7 with OS installs in prep for OKD install
 #  
 
-# You also need to:
-#   - have a ssh key in ~/.ssh/id_rsa.pub 
-
-# Create SSH key
-ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
-
-echo "==== Setting variables"
-SSHKEY=`cat ~/.ssh/id_rsa.pub`
-PUBLICIP=`ip address show dev bond0 |grep bond0 |grep -v bond0:0 |grep inet |awk -F" " '{ print $2}' |awk -F"/" '{print $1}'`
-
 echo "==== clean up yum and repo setup"
 yum clean all
 yum install yum-utils -y

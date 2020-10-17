@@ -77,7 +77,7 @@ chmod 644 /var/www/html/packetstrap/*.ign
 cat <<EOT > /var/www/html/packetstrap/bootstrap.boot
 #!ipxe
 
-kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/bootstrap.ign coreos.live.rootfs_url=fedora-coreos.rootfs.x86_64.img
+kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/bootstrap.ign coreos.live.rootfs_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.rootfs.x86_64.img
 initrd http://PUBLICIP:8080/packetstrap/fedora-coreos.initramfs.x86_64.img
 boot
 EOT
@@ -85,7 +85,7 @@ EOT
 cat <<EOT > /var/www/html/packetstrap/master.boot
 #!ipxe
 
-kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/master.ign coreos.live.rootfs_url=fedora-coreos.rootfs.x86_64.img
+kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/master.ign coreos.live.rootfs_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.rootfs.x86_64.img
 initrd http://PUBLICIP:8080/packetstrap/fedora-coreos.initramfs.x86_64.img
 boot
 EOT
@@ -93,7 +93,7 @@ EOT
 cat <<EOT > /var/www/html/packetstrap/worker.boot
 #!ipxe
 
-kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/worker.ign coreos.live.rootfs_url=fedora-coreos.rootfs.x86_64.img
+kernel http://PUBLICIP:8080/packetstrap/fedora-coreos.kernel-x86_64 ip=dhcp rd.neednet=1 initrd=fedora-coreos.initramfs.x86_64.img console=ttyS1,115200n8 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.metal.x86_64.raw.xz coreos.inst.ignition_url=http://PUBLICIP:8080/packetstrap/worker.ign coreos.live.rootfs_url=http://PUBLICIP:8080/packetstrap/fedora-coreos.rootfs.x86_64.img
 initrd http://PUBLICIP:8080/packetstrap/fedora-coreos.initramfs.x86_64.img
 boot
 EOT
