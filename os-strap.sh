@@ -148,7 +148,9 @@ echo "==== get okd install, client, and COS images"
 mkdir binaries
 pushd binaries
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-client-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
+mv openshift-client-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz openshift-client.tar.gz
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-install-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
+mv openshift-install-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz openshift-install.tar.gz
 
 mkdir pxe
 pushd pxe
@@ -169,7 +171,7 @@ mv fedora-coreos-32.20200923.3.0-metal.x86_64.raw.xz fedora-coreos.metal.x86_64.
 popd
 popd
 
-tar -xvzf ./binaries/openshift-install-linux.tar.gz
-tar -xvzf ./binaries/openshift-client-linux.tar.gz
+tar -xvzf ./binaries/openshift-install.tar.gz
+tar -xvzf ./binaries/openshift-client.tar.gz
 
 echo "OS upgrades, firewall, haproxy, and apache, as well as OKD packages installed."
