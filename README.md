@@ -1,46 +1,55 @@
-# Deploying OpenShift 4.4 on Packet
-I thought I’d share how I’ve automated a large portion of the deployment of OpenShift 4.4 on bare metal from Packet. I did this rather quickly, so your mileage may vary. You should always consider using the official documentation if you are doing something serious! I’m assuming you have:
+# Adapted from James Labocki
+
+Original scripts from James Labocki at https://github.com/jameslabocki/packetstrap/
+
+# Deploying OKD 4.5 on Packet
+You need:
 
  - SSH keys configured in Packet
  - A domain registered in AWS Route53 (feel free to use your favorite DNS service)
  - Access to OpenShift subscriptions
 
-I used the Parsippany, USA (EWR1) datacenter, but this should work with any datacenter. You will want to deploy "On Demand" server types for all servers deployed.
+ You will want to deploy "On Demand" server types for all servers deployed.
 
-First, deploy the following in EWR1:
+First, deploy the following:
 
  - x1.small.x86 ($0.40/hour)
- - Operating System = Licensed – RHEL 7
+ - Operating System = CentOS 7
 
-This node will act as our “helper”. This is not to be confused with the bootstrap node for deploying OpenShift. We will deploy that later. The “helper” will be where we run the packetstrap.sh script to get everything ready to go.
+This node will act as our “helper”. This is not to be confused with the bootstrap node for deploying OKD. We will deploy that later. The “helper” will be where we run the os-strap.sh and okd-strap.sh scripts to get everything ready to go.
 
 Once x1.small.x86 is up and running ssh to it and download the scripts (git isn’t installed by default).
 
 ```
-# wget https://raw.githubusercontent.com/jameslabocki/packetstrap/master/packetstrap.sh
+# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/os-strap.sh
 
-# wget https://raw.githubusercontent.com/jameslabocki/packetstrap/master/fixhaproxy.sh
+# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/okd-strap.sh
 
-# wget https://raw.githubusercontent.com/jameslabocki/packetstrap/master/imageregistry.sh
+# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/fixhaproxy.sh
 
-# wget https://raw.githubusercontent.com/jameslabocki/packetstrap/master/persistentvolumes.sh
+# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/imageregistry.sh
+
+# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/persistentvolumes.sh
 ```
 
 ```
 # chmod +x *.sh
 ```
 
-Now download your pull-secret from the [OpenShift Install Page](https://cloud.redhat.com/openshift/install/pull-secret) and drop it into your current working directory as pull-secret.txt. After that, run the packetstrap.sh script and pass it three arguments:
+You don't need a pull-secret for OKD.
 
- - The pool ID to use that contains the OpenShift subscriptions.
+Go to the dir you want to use for downloading binaries (sub-dirs will be created) and run ./os.strap.sh.
+
+After that, run the okd-strap.sh script and pass it two arguments:
+
  - The domain name (demonstr8.net below)
  - The sub-domain name and/or cluster name (test below)
 
 ```
-# ./packetstrap.sh 8a85f99c6f0fa8e3016f19db8d17768e demonstr8.net test
+# ./okd-strap.sh demonstr8.net test
 ```
 
-This will take a little bit to run and it does a lot of things. You can [view the script](https://github.com/jameslabocki/packetstrap/blob/master/packetstrap.sh) if you want to see everything it does. In the end, if everything worked you should see this:
+This will take a little bit to run and it does a lot of things. In the end, if everything worked you should see this:
 
 ```
 ==== create manifests
