@@ -79,14 +79,15 @@ http://147.75.199.131:8080/packetstrap/worker.boot
 ```
 
 
-Your IP address will be different of course. As you can see, you are provided with the iPXE boot URLs for the bootstrap, master, and worker nodes. Now you can boot the following in Packet.
+Your IP address will be different of course. As you can see, you are provided with the iPXE boot URLs for the bootstrap, master, and worker nodes. 
+Now you can boot the following in Packet console (choose your own server type):
 
- - bootstrap – c2.medium.x86 – custom iPXE – use the bootstrap.boot URL above
- - master0 – c2.medium.x86 – custom iPXE – use the master.boot URL above
- - master1 – c2.medium.x86 – custom iPXE – use the master.boot URL above
- - master2 – c2.medium.x86 – custom iPXE – use the master.boot URL above
- - worker1 – c2.medium.x86 – custom iPXE – use the worker.boot URL above
- - worker2 – c2.medium.x86 – custom iPXE – use the worker.boot URL above
+ - bootstrap – c3.medium.x86 – custom iPXE – use the bootstrap.boot URL above
+ - master0 – c3.medium.x86 – custom iPXE – use the master.boot URL above
+ - master1 – c3.medium.x86 – custom iPXE – use the master.boot URL above
+ - master2 – c3.medium.x86 – custom iPXE – use the master.boot URL above
+ - worker1 – c3.medium.x86 – custom iPXE – use the worker.boot URL above
+ - worker2 – c3.medium.x86 – custom iPXE – use the worker.boot URL above
 
 As those boot, you’ll need to get those IP addresses into Amazon Route53 and also change haproxy to have the right IP addresses.
 

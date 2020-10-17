@@ -7,6 +7,8 @@ echo "==== clean up yum and repo setup"
 yum clean all
 yum install yum-utils -y
 yum install firewalld -y
+# If you are ok with vi, uncomment this or change to your favourite editor
+yum install emacs -y
 
 service firewalld start
 
@@ -157,7 +159,8 @@ wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/32.20200
 mv fedora-coreos-32.20200923.3.0-live-rootfs.x86_64.img fedora-coreos.rootfs.x86_64.img
 wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/32.20200923.3.0/x86_64/fedora-coreos-32.20200923.3.0-metal.x86_64.raw.xz
 mv fedora-coreos-32.20200923.3.0-metal.x86_64.raw.xz fedora-coreos.metal.x86_64.raw.xz
-
+wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/32.20200923.3.0/x86_64/fedora-coreos-32.20200923.3.0-metal.x86_64.raw.xz.sig
+mv fedora-coreos-32.20200923.3.0-metal.x86_64.raw.xz.sig fedora-coreos.metal.x86_64.raw.xz.sig
 popd
 popd
 
