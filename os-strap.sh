@@ -9,6 +9,8 @@ yum install yum-utils -y
 yum install firewalld -y
 # If you are ok with vi, uncomment this or change to your favourite editor
 yum install emacs -y
+# Fix annoying locale errors
+cp environment /etc/
 
 service firewalld start
 
@@ -42,7 +44,7 @@ yum install nfs-utils -y
 echo "/mnt/data *(rw,sync,no_wdelay,no_root_squash,insecure)" >> /etc/exports
 
 #This is a terrible idea
-mkdir /mnt/data
+mkdir -p /mnt/data
 chmod -R 777 /mnt/data
 
 
@@ -137,14 +139,14 @@ echo "apache is setup" > /var/www/html/test
 service httpd start
 
 echo "==== get okd install, client, and COS images"
-mkdir binaries
+mkdir -p binaries
 pushd binaries
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-client-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
 mv openshift-client-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz openshift-client.tar.gz
 wget https://github.com/openshift/okd/releases/download/4.5.0-0.okd-2020-10-03-012432/openshift-install-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz
 mv openshift-install-linux-4.5.0-0.okd-2020-10-03-012432.tar.gz openshift-install.tar.gz
 
-mkdir pxe
+mkdir -p pxe
 pushd pxe
 # Get fedora-coreos.initramfs.x86_64.img, fedora-coreos.x86_64.iso, fedora-coreos.kernel-x86_64, fedora-coreos.rootfs.x86_64.img, 
 # fedora-coreos.metal.x86_64.raw.xz

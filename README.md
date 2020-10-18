@@ -83,17 +83,27 @@ Your IP address will be different of course. As you can see, you are provided wi
 Now you can boot the following in Packet console (choose your own server type):
 
  - bootstrap – c3.medium.x86 – custom iPXE – use the bootstrap.boot URL above
+
+Once you have an IP address for the bootstrap node, you need to configure DNS for api-int.<sub-domain>.<domain>, e.g. api-int.okd.mydomain.com. 
+This is because the ignition files for master and worker nodes references the DNS domain name.
+
+Once the DNS resolution is verified working, you can continue bootstrapping:
+
  - master0 – c3.medium.x86 – custom iPXE – use the master.boot URL above
  - master1 – c3.medium.x86 – custom iPXE – use the master.boot URL above
  - master2 – c3.medium.x86 – custom iPXE – use the master.boot URL above
- - worker1 – c3.medium.x86 – custom iPXE – use the worker.boot URL above
- - worker2 – c3.medium.x86 – custom iPXE – use the worker.boot URL above
+ - worker1 – s3.xlarge.x86 – custom iPXE – use the worker.boot URL above
+ - worker2 – s3.xlarge.x86 – custom iPXE – use the worker.boot URL above
 
-As those boot, you’ll need to get those IP addresses into Amazon Route53 and also change haproxy to have the right IP addresses.
+In AM6, the c3.medium server is a Dell PowerEdge R6515.
 
-Here are the changes to Route53 I made (as an example)
+As those boot, you’ll need to get those IP addresses into your favourite DNS and also change haproxy to have the right IP addresses.
+The iPXE boot will pull the images from the helper node, configure the system with the ignition file and install the boot image.
+Then it will reboot. Once it's up and running, you should be able to ssh into the server using the core users and the created key:
 
-![DNS Entries in Route53](images/route53.png)
+```
+ssh core@a.b.c.d
+```
 
 For editing haproxy you can just edit the values in the fixhaproxy.sh and run the script.
 
@@ -103,14 +113,16 @@ For editing haproxy you can just edit the values in the fixhaproxy.sh and run th
 # ./fixhaproxy.sh
 ```
 
-Now you can watch and wait to see if the deployment returns
+Now you can connect to your helper node on http://a.b.c.d:9000/ and look at haproxy status as the servers are coming up.
+
+NOTE!!! The Packet out-of-band console will not be able to show anything once the server has booted into Fedora CoreOS.
 
 ```
 # ./openshift-install --dir=packetinstall wait-for bootstrap-complete --log-level=info 
 INFO Waiting up to 20m0s for the Kubernetes API at https://api.test.demonstr8.net:6443&#8230;
 ```
 
-It should look like this if it succeeds
+It should look like this if it succeeds:
 
 ```
 # ./openshift-install --dir=packetinstall wait-for bootstrap-complete --log-level=info

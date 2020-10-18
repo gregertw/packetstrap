@@ -14,6 +14,8 @@
 
 # Create SSH key
 ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+# Fix access modes
+chmod go-rwx .ssh/*
 
 echo "==== Setting variables"
 # Pullsecret for OKD
@@ -24,7 +26,7 @@ SSHKEY=`cat ~/.ssh/id_rsa.pub`
 PUBLICIP=`ip address show dev bond0 |grep bond0 |grep -v bond0:0 |grep inet |awk -F" " '{ print $2}' |awk -F"/" '{print $1}'`
 
 echo "==== create manifests"
-mkdir packetinstall
+mkdir -p packetinstall
 cat <<EOT > packetinstall/install-config.yaml
 apiVersion: v1
 baseDomain: BASEDOMAIN
@@ -66,7 +68,7 @@ sed -i 's/mastersSchedulable: true/mastersSchedulable: false/' packetinstall/man
 
 echo "==== Create publicly accessible directory, Copy ignition files, Create iPXE files"
 
-mkdir /var/www/html/packetstrap
+mkdir -p /var/www/html/packetstrap
 cp packetinstall/*.ign /var/www/html/packetstrap/
 cp ./binaries/pxe/* /var/www/html/packetstrap/
 chmod 644 /var/www/html/packetstrap/*.ign
@@ -104,7 +106,7 @@ sed -i "s/PUBLICIP/$PUBLICIP/g" /var/www/html/packetstrap/bootstrap.boot
 sed -i "s/PUBLICIP/$PUBLICIP/g" /var/www/html/packetstrap/master.boot
 sed -i "s/PUBLICIP/$PUBLICIP/g" /var/www/html/packetstrap/worker.boot
 
-
+rm -f iPXE_info.txt
 
 echo "==== all done, you can now iPXE servers to:"
 echo "       http://${PUBLICIP}:8080/packetstrap/bootstrap.boot" | tee -a iPXE_info.txt
