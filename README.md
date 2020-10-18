@@ -2,7 +2,7 @@
 
 Original scripts from James Labocki at https://github.com/jameslabocki/packetstrap/
 
-# Deploying OKD 4.5 on Packet
+## Deploying OKD 4.5 on Packet
 You need:
 
  - SSH keys configured in Packet
@@ -18,7 +18,7 @@ First, deploy the following:
 
 This node will act as our “helper”. This is not to be confused with the bootstrap node for deploying OKD. We will deploy that later. The “helper” will be where we run the os-strap.sh and okd-strap.sh scripts to get everything ready to go.
 
-
+## Get the helper ready
 
 Once x1.small.x86 is up and running ssh to it and:
 Install git:
@@ -34,6 +34,9 @@ git clone https://github.com/gregertw/packetstrap.git
 You don't need a pull-secret for OKD.
 
 Make sure you are in the dir above packetstrap/ (sub-dirs will be created) and run ./os-strap.sh.
+
+Now you have all the binaries needed. The okd-strap.sh file assumes your public IP NIC is named bond0 in the iPXE boot info. 
+If not, edit okd-strap.sh to use the correct NIC. If you only have one NIC, you can remove bond0: and just use ip=dhcp.
 
 After that, run the okd-strap.sh script and pass it two arguments:
 
@@ -64,9 +67,26 @@ http://147.75.199.131:8080/packetstrap/worker.boot
 
 
 Your IP address will be different of course. As you can see, you are provided with the iPXE boot URLs for the bootstrap, master, and worker nodes. 
+
+## Bootstrapping OKD servers
+
+You now have the load balancer (haproxy), the helper apache server, the images, as well as the configurations. It's time to load Fedora CoreOS
+and the right software config on the bootstrap, master, and worker nodes.
+
 Now you can boot the following in Packet console (choose your own server type):
 
  - bootstrap – c3.medium.x86 – custom iPXE – use the bootstrap.boot URL above
+
+### A note on iPXE boot
+
+The iPXE boot will pull the images from the helper node, configure the system with the ignition file and install the boot image.
+
+Typically, the process includes loading the images, rebooting, installing the partitions and configuring the system, rebooting, load Fedora CoreOS,
+and install the OKD config, and ... rebooting. This takes quite a bit of time. 
+
+NOTE!!! The Packet out-of-band console will not be able to show anything once the server has booted into Fedora CoreOS.
+
+### Bootstrapping masters and workers
 
 Once you have an IP address for the bootstrap node, you need to configure DNS for api-int.<sub-domain>.<domain>, e.g. api-int.okd.mydomain.com. 
 This is because the ignition files for master and worker nodes references the DNS domain name.
@@ -82,7 +102,9 @@ Once the DNS resolution is verified working, you can continue bootstrapping:
 In AM6, the c3.medium server is a Dell PowerEdge R6515.
 
 As those boot, you’ll need to get those IP addresses into your favourite DNS and also change haproxy to have the right IP addresses.
-The iPXE boot will pull the images from the helper node, configure the system with the ignition file and install the boot image.
+
+## Finalise config on helper
+
 Then it will reboot. Once it's up and running, you should be able to ssh into the server using the core users and the created key:
 
 ```
@@ -99,7 +121,11 @@ For editing haproxy you can just edit the values in the fixhaproxy.sh and run th
 
 Now you can connect to your helper node on http://a.b.c.d:9000/ and look at haproxy status as the servers are coming up.
 
-NOTE!!! The Packet out-of-band console will not be able to show anything once the server has booted into Fedora CoreOS.
+## Bootstrap OKD
+
+If everything worked, the bootstrap server and masters should start building an OKD cluster.
+
+Use this to monitor to bootstrap:
 
 ```
 # ./openshift-install --dir=packetinstall wait-for bootstrap-complete --log-level=info 

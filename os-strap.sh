@@ -10,7 +10,7 @@ yum install firewalld -y
 # If you are ok with vi, uncomment this or change to your favourite editor
 yum install emacs -y
 # Fix annoying locale errors
-cp ./packetstratp/environment /etc/
+cp ./packetstrap/environment /etc/
 
 service firewalld start
 
