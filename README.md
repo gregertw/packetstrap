@@ -31,25 +31,9 @@ Then check out the repo:
 git clone https://github.com/gregertw/packetstrap.git
 ```
 
-```
-# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/os-strap.sh
-
-# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/okd-strap.sh
-
-# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/fixhaproxy.sh
-
-# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/imageregistry.sh
-
-# wget https://raw.githubusercontent.com/gregertw/packetstrap/master/persistentvolumes.sh
-```
-
-```
-# chmod +x *.sh
-```
-
 You don't need a pull-secret for OKD.
 
-Go to the dir you want to use for downloading binaries (sub-dirs will be created) and run ./os.strap.sh.
+Make sure you are in the dir above packetstrap/ (sub-dirs will be created) and run ./os-strap.sh.
 
 After that, run the okd-strap.sh script and pass it two arguments:
 
