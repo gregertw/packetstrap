@@ -35,9 +35,6 @@ You don't need a pull-secret for OKD.
 
 Make sure you are in the dir above packetstrap/ (sub-dirs will be created) and run ./os-strap.sh.
 
-Now you have all the binaries needed. The okd-strap.sh file assumes your public IP NIC is named bond0 in the iPXE boot info. 
-If not, edit okd-strap.sh to use the correct NIC. If you only have one NIC, you can remove bond0: and just use ip=dhcp.
-
 After that, run the okd-strap.sh script and pass it two arguments:
 
  - The domain name (demonstr8.net below)
@@ -84,7 +81,8 @@ The iPXE boot will pull the images from the helper node, configure the system wi
 Typically, the process includes loading the images, rebooting, installing the partitions and configuring the system, rebooting, load Fedora CoreOS,
 and install the OKD config, and ... rebooting. This takes quite a bit of time. 
 
-NOTE!!! The Packet out-of-band console will not be able to show anything once the server has booted into Fedora CoreOS.
+NOTE!!! The Packet out-of-band console will not be able to show anything once the server has booted into Fedora CoreOS and you connect too
+late or disconnect. Connect early and stay connected to the console to see how CoreOS bootstrapping is going (or wait...)
 
 ### Bootstrapping masters and workers
 
@@ -175,7 +173,8 @@ You can approve the pending requests quickly like this.
 # ./oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs ./oc adm certificate approve
 ```
 
-Now you should be able to point your browser at the OpenShift console located at https://console-openshift-console.apps.test.demonstr8.net/ where test = cluster name and demonstr8.net = basedomain or $2 and $3 from your packetstrap.sh command at the start.
+Now you should be able to point your browser at the OpenShift console located at https://console-openshift-console.apps.test.demonstr8.net/ where 
+test = cluster name and demonstr8.net = basedomain or $2 and $3 from your okd-strap.sh command at the start.
 
 If you want to enable an image registry quickly you can do that by running imageregistry.sh. Note that this is not meant for production use as it uses local storage.
 
@@ -189,4 +188,3 @@ If you want to create some persistent volumes you can run the persistentvolumes.
 # ./persistentvolumes.sh
 ```
 
-Now you can download the [RHEL 8.1 guest image](https://access.redhat.com/downloads/content/479/ver=/rhel---8/8.1/x86_64/product-software), upload it to /var/www/html on the helper node and get to deploying some VMs on [OpenShift Virtualization](https://docs.openshift.com/container-platform/4.4/welcome/index.html)!
